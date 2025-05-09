@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research - Mathematics PhD Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-infinity"></i></h1>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="research.html" class="nav-link active">Research</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="teaching.html" class="nav-link">Teaching</a></li>
+                <li><a href="talks.html" class="nav-link">Talks</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Research Section -->
+    <section id="research" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Research & Projects</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="research-areas">
+                <div class="research-area">
+                    <h3>Analysis</h3>
+                    <p>Exploring the properties integrals, measures, and functional spaces.</p>
+                    <div class="math-equation" data-latex="d\mu = f\, dx"></div>
+                </div>
+                <div class="research-area">
+                    <h3>Probablity</h3>
+                    <p>Investigating the behavior of random variables and random processes.</p>
+                    <div class="math-equation" data-latex="\lim_{n \to \infty} \mathbf{E}(1_{A} | \mathcal{F}_n ) = 1_A"></div>
+                </div>
+            </div>
+            
+            <div class="projects">
+                <h3>Featured Projects</h3>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h4>A Breif Survey of Concentration Inequalities</h4>
+                        </div>
+                        <div class="project-body">
+                            <p>This project provides a introductory exposition of concentration inequalities, including the Chernoff bound, Hoeffding's inequality, and the Bennet's Inequality.</p>
+                            <div class="project-links">
+                                <a href="/static/ConcentrationInequalities.pdf" class="project-link"><i class="fas fa-file-alt"></i> Paper</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h4>Hybrid Filtering Technique for Accurate GNSS State Estimation</h4>
+                        </div>
+                        <div class="project-body">
+                            <p>Developed a hybrid diffrentiable filtering technique combining model-based Kalman filter with data-driven optization for GNSS state estimation.</p>
+                            <div class="project-links">
+                                <a href="https://github.com/NISCHALPI/diff-kalman" class="project-link"><i class="fas fa-code"></i> Code</a>
+                                <a href="https://www.mdpi.com/2072-4292/17/9/1552" class="project-link"><i class="fas fa-file-alt"></i> Paper</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mathematics PhD Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+            
+            // Render LaTeX from data-latex attributes
+            document.querySelectorAll('.math-equation').forEach(function(element) {
+                katex.render(element.getAttribute('data-latex'), element, {
+                    throwOnError: false,
+                    displayMode: true
+                });
+            });
+        });
+    </script>
+</body>
+</html>

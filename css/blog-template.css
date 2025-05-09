@@ -1,0 +1,596 @@
+/* Blog Template Specific Styles */
+.blog-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.blog-meta {
+    margin-bottom: 15px;
+    color: var(--text-muted);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+.blog-meta span {
+    margin-right: 15px;
+    display: inline-block;
+}
+
+.post-category {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.post-title {
+    font-size: 2.8rem;
+    margin-bottom: 25px;
+    font-family: 'Playfair Display', serif;
+    line-height: 1.2;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.author-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid var(--primary-color);
+}
+
+.author-info {
+    text-align: left;
+}
+
+.author-name {
+    display: block;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.author-title {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.blog-content {
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.8;
+}
+
+.blog-content p {
+    margin-bottom: 25px;
+    color: var(--text-secondary);
+}
+
+.blog-content .lead {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.7;
+}
+
+.math-equation {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 1.1rem;
+    background-color: #202020;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.blog-content h2 {
+    font-size: 2rem;
+    margin: 40px 0 20px;
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
+}
+
+.blog-content h3 {
+    font-size: 1.5rem;
+    margin: 30px 0 15px;
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-color);
+}
+
+.blog-figure {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.figure-image {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
+
+figcaption {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.blog-list {
+    margin: 20px 0 30px 20px;
+    color: var(--text-secondary);
+}
+
+.blog-list li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.blog-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
+.code-block {
+    margin: 30px 0;
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-block pre {
+    padding: 20px;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-block code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    color: #e6e6e6;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.blog-references {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+}
+
+.blog-references h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.blog-references ol {
+    margin-left: 20px;
+    color: var(--text-secondary);
+}
+
+.blog-references li {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.blog-footer {
+    max-width: 800px;
+    margin: 50px auto 0;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+}
+
+.blog-tags {
+    margin-bottom: 20px;
+}
+
+.tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary-color);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    transition: all var(--transition-speed) ease;
+}
+
+.tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.blog-share {
+    margin-bottom: 30px;
+}
+
+.blog-share span {
+    margin-right: 10px;
+    color: var(--text-muted);
+}
+
+.share-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: var(--card-bg);
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all var(--transition-speed) ease;
+}
+
+.share-link:hover {
+    background: var(--primary-color);
+    color: var(--background-dark);
+    transform: translateY(-3px);
+}
+
+.blog-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.prev-post, .next-post, .all-posts {
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.prev-post i, .next-post i {
+    transition: transform var(--transition-speed) ease;
+}
+
+.prev-post:hover i {
+    transform: translateX(-5px);
+}
+
+.next-post:hover i {
+    transform: translateX(5px);
+}
+
+.all-posts {
+    padding: 8px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
+}
+
+.all-posts:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#related-posts {
+    background: var(--background-light);
+    padding: 60px 0;
+    min-height: auto;
+}
+
+#related-posts h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+}
+
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.related-post {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.related-post:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.related-post .post-date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.related-post h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: var(--text-primary);
+    font-family: 'Playfair Display', serif;
+}
+
+.related-post p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.related-post .read-more {
+    color: var(--primary-color);
+    font-weight: 600;
+    display: inline-block;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.related-post .read-more::after {
+    content: '→';
+    margin-left: 5px;
+    transition: transform var(--transition-speed) ease;
+    display: inline-block;
+}
+
+.related-post .read-more:hover::after {
+    transform: translateX(5px);
+}
+
+/* Responsive Design for Blog Template */
+@media (max-width: 768px) {
+    .post-title {
+        font-size: 2.2rem;
+    }
+    
+    .blog-content {
+        padding: 0 15px;
+    }
+    
+    .blog-navigation {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .blog-footer {
+        text-align: center;
+    }
+    
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .post-title {
+        font-size: 1.8rem;
+    }
+    
+    .blog-content h2 {
+        font-size: 1.6rem;
+    }
+    
+    .blog-content h3 {
+        font-size: 1.3rem;
+    }
+}
+
+
+
+/* --- Enhanced Styles for Professional Markdown Rendering --- */
+
+/* General Content Enhancements */
+.blog-content {
+    font-size: 1.1rem; /* Slightly larger base font for readability */
+    color: #ccc; /* Lighter text color on dark background */
+}
+
+.blog-content p {
+    margin-bottom: 1.5em; /* More spacing between paragraphs */
+    line-height: 1.7;
+}
+
+.blog-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--primary-color);
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.blog-content a:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+/* Headings */
+.blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6 {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-primary);
+    margin-top: 2em;
+    margin-bottom: 1em;
+    line-height: 1.3;
+}
+
+.blog-content h1 {
+    font-size: 2.5rem; /* Corresponds to .post-title roughly */
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.3em;
+}
+
+.blog-content h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.2em;
+}
+
+.blog-content h3 {
+    font-size: 1.75rem;
+}
+
+.blog-content h4 {
+    font-size: 1.5rem;
+}
+
+/* Blockquotes */
+.blog-content blockquote {
+    margin: 2em 0;
+    padding: 1em 1.5em;
+    border-left: 5px solid var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ddd;
+    font-style: italic;
+}
+
+.blog-content blockquote p {
+    margin-bottom: 0.5em;
+}
+
+.blog-content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Lists (ul, ol) */
+.blog-content ul, .blog-content ol {
+    margin: 1em 0 1.5em 2em;
+    padding-left: 1.5em;
+}
+
+.blog-content li {
+    margin-bottom: 0.5em;
+    line-height: 1.6;
+}
+
+.blog-content ul li::marker {
+    color: var(--primary-color);
+}
+
+.blog-content ol li::marker {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Code Blocks and Inline Code */
+.blog-content pre, .blog-content .code-block pre {
+    background-color: #2d2d2d; /* Slightly different background for pre */
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 1.5em;
+    overflow-x: auto;
+    margin: 2em 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.blog-content code, .blog-content .code-block code {
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    background-color: rgba(255,255,255,0.1); /* Subtle background for inline code */
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #f0f0f0;
+}
+
+.blog-content pre code {
+    background-color: transparent; /* No background for code inside pre */
+    padding: 0;
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* Images */
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1.5em auto;
+    display: block;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.blog-content figure {
+    margin: 2em 0;
+}
+
+.blog-content figcaption {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    margin-top: 0.5em;
+    font-style: italic;
+}
+
+/* KaTeX Math Styling */
+.blog-content .katex {
+    font-size: 1.1em; /* Adjust KaTeX base font size if needed */
+    color: #e0e0e0; /* Ensure good contrast for math formulas */
+}
+
+.blog-content .katex-display {
+    margin: 1.5em auto; /* Spacing for display math */
+    padding: 1em;
+    background-color: rgba(0,0,0,0.1); /* Subtle background for display math */
+    border-radius: 6px;
+    overflow-x: auto; /* Handle very long equations */
+    border: 1px solid #333;
+}
+
+/* Horizontal Rule */
+.blog-content hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 3em 0;
+}
+
+/* Table Styling */
+.blog-content table {
+    width: 100%;
+    margin: 2em 0;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+}
+
+.blog-content th, .blog-content td {
+    border: 1px solid var(--border-color);
+    padding: 0.75em 1em;
+    text-align: left;
+}
+
+.blog-content th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.blog-content tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Specific Post Header/Footer adjustments if needed */
+.blog-header .post-title {
+    color: #fff; /* Ensure title is bright */
+}
+
+.blog-meta .post-category {
+    background-color: var(--primary-color);
+    color: #121212; /* Dark text on primary color background for tags */
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.blog-footer .tag {
+    background-color: var(--primary-color);
+    color: #121212;
+    padding: 0.3em 0.8em;
+    font-size: 0.85rem;
+}
+
