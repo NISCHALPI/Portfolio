@@ -1,0 +1,405 @@
+/* Animation Styles for Mathematics PhD Portfolio */
+
+/* Base Animation Properties */
+:root {
+    --animate-duration: 0.8s;
+    --animate-delay: 0.2s;
+    --animate-repeat: 1;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+    from {
+        transform: translateY(25px); /* Adjusted for a smoother start */
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Slide Down Animation */
+@keyframes slideDown {
+    from {
+        transform: translateY(-25px); /* Adjusted for a smoother start */
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9); /* Adjusted for a smoother start */
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Subtle Pulse Animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Floating Animation for Highlighting Elements */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Typing Animation for text */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Border Highlight Animation */
+@keyframes borderPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* Page Load Animations */
+
+/* Navbar Animation */
+#navbar {
+    animation: slideDown 0.6s ease-out forwards;
+}
+
+/* Logo Animation */
+.logo {
+    animation: scaleIn 0.8s ease-out forwards;
+}
+
+/* Menu Items Animation */
+.nav-menu li {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.nav-menu li:nth-child(1) { animation-delay: 0.1s; }
+.nav-menu li:nth-child(2) { animation-delay: 0.2s; }
+.nav-menu li:nth-child(3) { animation-delay: 0.3s; }
+.nav-menu li:nth-child(4) { animation-delay: 0.4s; }
+.nav-menu li:nth-child(5) { animation-delay: 0.5s; }
+.nav-menu li:nth-child(6) { animation-delay: 0.6s; }
+
+/* Home Section Animations */
+.image-container {
+    opacity: 0;
+    animation: scaleIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.3s;
+}
+
+.bio h1 {
+    opacity: 0;
+    animation: slideUp 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards 0.4s;
+}
+
+.bio h2 {
+    opacity: 0;
+    animation: slideUp 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards 0.6s;
+}
+
+.bio p {
+    opacity: 0;
+    animation: slideUp 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards 0.8s;
+}
+
+.cta-buttons {
+    opacity: 0;
+    animation: slideUp 1s cubic-bezier(0.215, 0.61, 0.355, 1) forwards 1s;
+}
+
+/* Highlight Text Animation */
+.highlight {
+    position: relative;
+    display: inline-block;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-out;
+}
+
+.highlight:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Button Hover Effects */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+    z-index: -1;
+}
+
+.btn:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn:active {
+    transform: translateY(0px);
+}
+
+/* Animated Sections for Content Pages */
+.fade-in {
+    opacity: 1; /* Start visible to prevent flicker */
+    transform: translateY(0); /* Start in final position */
+    will-change: opacity, transform; /* Optimize for animation */
+    transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); /* Updated easing */
+}
+
+.fade-in:not(.active) {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.fade-in.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Featured Post Specific Animation - smoother and more subtle */
+.featured-post.fade-in {
+    will-change: opacity, transform; /* Optimize for animation */
+    transition: opacity 0.9s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1); /* Updated easing */
+}
+
+.featured-post.fade-in.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation for Research Areas */
+.research-area {
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.research-area:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Adjusted shadow for a softer effect */
+}
+
+/* Animation for Project Cards */
+.project-card {
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Added box-shadow to transition */
+}
+
+.project-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Added subtle shadow for card lift */
+}
+
+/* Blog Post Hover Effect */
+.blog-post {
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.blog-post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Adjusted shadow for a refined lift */
+}
+
+/* Animated Images */
+.animated-img {
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* Updated easing */
+}
+
+.animated-img:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Animations */
+@media (max-width: 768px) {
+    /* Lighter animations for mobile to improve performance but still keep things animated */
+    .image-container {
+        opacity: 1;
+        animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.2s;
+    }
+    
+    .bio h1 {
+        opacity: 1;
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .bio h2,
+    .bio p {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards 0.3s;
+    }
+    
+    .cta-buttons {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-out forwards 0.5s;
+    }
+    
+    /* Featured post mobile animation - simpler animation for better performance */
+    .featured-post.fade-in {
+        transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    
+    .featured-post.fade-in.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Mobile Menu Animation - smoother transition */
+    .nav-menu {
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                    opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    
+    .nav-menu.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .menu-toggle {
+        transition: transform 0.3s ease;
+    }
+    
+    .menu-toggle.active {
+        transform: rotate(90deg);
+    }
+    
+    /* Reduce animation intensity on mobile */
+    .research-area:hover,
+    .project-card:hover,
+    .blog-post:hover {
+        transform: none;
+    }
+}
+
+/* Intersection Observer Animation Helper Classes */
+.reveal {
+    opacity: 1; /* Start visible to prevent flicker on reload */
+    transform: translateY(0); /* Start in final position */
+    will-change: opacity, transform; /* Optimize for animation */
+    transition: opacity 1s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); /* Updated easing */
+}
+
+.reveal:not(.visible) {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-left {
+    opacity: 1; /* Start visible to prevent flicker on reload */
+    transform: translateX(0); /* Start in final position */
+    will-change: opacity, transform; /* Optimize for animation */
+    transition: opacity 1s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); /* Updated easing */
+}
+
+.reveal-left:not(.visible) {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.reveal-right {
+    opacity: 1; /* Start visible to prevent flicker on reload */
+    transform: translateX(0); /* Start in final position */
+    will-change: opacity, transform; /* Optimize for animation */
+    transition: opacity 1s cubic-bezier(0.645, 0.045, 0.355, 1), 
+                transform 1s cubic-bezier(0.645, 0.045, 0.355, 1); /* Updated easing */
+}
+
+.reveal-right:not(.visible) {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.reveal-left.visible,
+.reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Animated Footer */
+footer {
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 1.5s;
+}

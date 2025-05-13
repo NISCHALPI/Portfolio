@@ -48,8 +48,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Initialize scroll animations with Intersection Observer
+    function initScrollAnimations() {
+        // Select all animation elements
+        const elements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+        
+        // Add staggered delay to reveal elements
+        elements.forEach((element, index) => {
+            element.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, idx) => {
+                if (entry.isIntersecting) {
+                    // Add a small delay before adding the visible class for smoother appearance
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, 100);
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger earlier
+            rootMargin: '0px 0px -10% 0px' // Show elements slightly before they enter the viewport
+        });
+        
+        elements.forEach(element => {
+            observer.observe(element);
+        });
+    }
+    
     // Initialize animations
     initFadeElements();
+    initScrollAnimations();
     
     // LaTeX rendering for mathematical equations
     if (typeof renderMathInElement === 'function') {
@@ -70,4 +101,36 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // Tag rendering for blog listing (blog.html) - plain text after tag icon
+    setTimeout(() => {
+        document.querySelectorAll('.blog-post, .featured-post-content').forEach(post => {
+            const meta = post.querySelector('.post-meta');
+            if (!meta) return;
+            let tagContainer = meta.querySelector('.post-tags');
+            if (!tagContainer) {
+                tagContainer = document.createElement('span');
+                tagContainer.className = 'post-tags';
+                meta.appendChild(tagContainer);
+            }
+            tagContainer.innerHTML = '';
+            let tags = [];
+            if (tagContainer.dataset.tags) {
+                try {
+                    tags = JSON.parse(tagContainer.dataset.tags);
+                } catch {
+                    tags = tagContainer.dataset.tags.split(',').map(t => t.trim()).filter(Boolean);
+                }
+            }
+            if (!tags.length) {
+                tags = tagContainer.textContent.split(',').map(t => t.trim()).filter(Boolean);
+            }
+            if (tags.length) {
+                const tagLabel = document.createElement('span');
+                tagLabel.className = 'tag-label';
+                tagLabel.innerHTML = `<i class="fas fa-tags"></i> ${tags.join(', ')}`;
+                tagContainer.appendChild(tagLabel);
+            }
+        });
+    }, 200);
 });

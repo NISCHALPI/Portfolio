@@ -9,9 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/animation.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="../js/main.js"></script>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -45,10 +48,26 @@
                 <span id="post-breadcrumb-title">Blog Post</span>
             </div>
             
-            <div id="blog-post-content-area">
+            <div id="blog-post-content-area" class="reveal">
                 <!-- Dynamic content will be loaded here -->
             </div>
             
+            <!-- Comments Section (Persistent, Authenticated, Polished UI) -->
+            <section id="comments" class="comments-section reveal">
+                <h2>Comments</h2>
+                <div id="comment-auth-area" class="comment-auth-area"></div>
+                <form id="comment-form" class="comment-form" style="display:none;">
+                    <textarea name="comment" placeholder="Write a comment..." rows="3" maxlength="1000" required></textarea>
+                    <div class="comment-form-footer">
+                        <span class="comment-char-count" id="comment-char-count">0/1000</span>
+                        <button type="submit" class="btn primary">Post Comment</button>
+                    </div>
+                </form>
+                <div id="comments-list" class="comments-list"></div>
+                <div id="comment-error" class="comment-error"></div>
+            </section>
+            <!-- End Comments Section -->
+
             <div class="blog-footer">
                  <div class="blog-tags" id="blog-tags-container">
                     <!-- Tags will be loaded here -->
@@ -66,7 +85,7 @@
             </div>
         </div>
     </section>
-
+    
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -74,117 +93,320 @@
         </div>
     </footer>
 
-    <script src="../js/main.js"></script>
+    <!-- JavaScript -->
     <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            const contentArea = document.getElementById("blog-post-content-area");
-            const breadcrumbTitle = document.getElementById("post-breadcrumb-title");
-            const tagsContainer = document.getElementById("blog-tags-container");
+    document.addEventListener("DOMContentLoaded", async function() {
+        const contentArea = document.getElementById("blog-post-content-area");
+        const breadcrumbTitle = document.getElementById("post-breadcrumb-title");
+        const tagsContainer = document.getElementById("blog-tags-container");
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const postFile = urlParams.get("post");
+        const urlParams = new URLSearchParams(window.location.search);
+        const postFile = urlParams.get("post");
 
-            if (!postFile) {
-                contentArea.innerHTML = "<p>Error: No blog post specified.</p>";
-                return;
+        if (!postFile) {
+            contentArea.innerHTML = "<p>Error: No blog post specified.</p>";
+            return;
+        }
+
+        try {
+            // Fetch the Markdown file
+            const response = await fetch(postFile); // Assumes postFile is a relative path like 'example-post.md'
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            const markdownContent = await response.text();
 
-            try {
-                // Fetch the Markdown file
-                const response = await fetch(postFile); // Assumes postFile is a relative path like 'example-post.md'
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const markdownContent = await response.text();
+            // Basic frontmatter parsing (can be made more robust)
+            let title = postFile.replace(".md", "").replace(/-/g, " "); // Default title
+            let author = "Author";
+            let date = "Date";
+            let tags = [];
+            let mainContent = markdownContent;
 
-                // Basic frontmatter parsing (can be made more robust)
-                let title = postFile.replace(".md", "").replace(/-/g, " "); // Default title
-                let author = "Author";
-                let date = "Date";
-                let tags = [];
-                let mainContent = markdownContent;
-
-                const frontmatterMatch = markdownContent.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-                if (frontmatterMatch && frontmatterMatch[1]) {
-                    const frontmatterText = frontmatterMatch[1];
-                    mainContent = markdownContent.substring(frontmatterMatch[0].length);
-                    const lines = frontmatterText.split("\n");
-                    lines.forEach(line => {
-                        const parts = line.split(":");
-                        if (parts.length >= 2) {
-                            const key = parts[0].trim();
-                            const value = parts.slice(1).join(":").trim().replace(/^["']|["']$/g, ""); // Remove quotes
-                            if (key === "title") title = value;
-                            if (key === "author") author = value;
-                            if (key === "date") date = new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-                            if (key === "tags") {
-                                try {
-                                    tags = JSON.parse(value); // Expects tags: ["tag1", "tag2"]
-                                } catch (e) {
-                                     // Fallback for simple comma-separated tags without brackets
-                                    tags = value.split(",").map(tag => tag.trim());
-                                }
+            const frontmatterMatch = markdownContent.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+            if (frontmatterMatch && frontmatterMatch[1]) {
+                const frontmatterText = frontmatterMatch[1];
+                mainContent = markdownContent.substring(frontmatterMatch[0].length);
+                const lines = frontmatterText.split("\n");
+                lines.forEach(line => {
+                    const parts = line.split(":");
+                    if (parts.length >= 2) {
+                        const key = parts[0].trim();
+                        const value = parts.slice(1).join(":").trim().replace(/^["']|["']$/g, ""); // Remove quotes
+                        if (key === "title") title = value;
+                        if (key === "author") author = value;
+                        if (key === "date") date = new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+                        if (key === "tags") {
+                            try {
+                                tags = JSON.parse(value); // Expects tags: ["tag1", "tag2"]
+                            } catch (e) {
+                                 // Fallback for simple comma-separated tags without brackets
+                                tags = value.split(",").map(tag => tag.trim());
                             }
                         }
-                    });
-                }
-                
-                breadcrumbTitle.textContent = title;
-                document.title = `${title} - Mathematics PhD Portfolio`;
-
-                // Construct HTML for header and content
-                let htmlContent = `
-                    <header class="blog-header">
-                        <h1 class="post-title">${title}</h1>
-                        <div class="blog-meta">
-                            <span class="post-date"><i class="far fa-calendar-alt"></i> ${date}</span>
-                            ${tags.length > 0 ? `<span class="post-tags"><i class="fas fa-tags"></i> ${tags.join(", ")}</span>` : ""}
-                        </div>
-                        <div class="post-author">
-                            <img src="../images/profile-placeholder.jpg" alt="Author image" class="author-image">
-                            <div class="author-info">
-                                <span class="author-name"><i class="fas fa-user"></i> ${author}</span>
-                            </div>
-                        </div>
-                    </header>
-                    <article class="blog-content">
-                        ${marked.parse(mainContent)}
-                    </article>
-                `;
-
-                contentArea.innerHTML = htmlContent;
-
-                // Populate tags in the footer
-                if (tags.length > 0) {
-                    tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join(" ");
-                }
-
-                // Render MathJax/KaTeX if present
-                if (window.renderMathInElement) {
-                    renderMathInElement(contentArea, {
-                        delimiters: [
-                            {left: "$$", right: "$$", display: true},
-                            {left: "$", right: "$", display: false},
-                            {left: "\\(", right: "\\)", display: false},
-                            {left: "\\[", right: "\\]", display: true}
-                        ]
-                    });
-                }
-
-            } catch (error) {
-                console.error("Error fetching or rendering blog post:", error);
-                contentArea.innerHTML = `<p>Error loading blog post: ${error.message}. Please check the file path and ensure the Markdown file exists in the 'blog' directory.</p>`;
-            }
-            
-            // Basic menu toggle functionality from main.js (if not already loaded or conflicting)
-            const menuToggle = document.querySelector(".menu-toggle");
-            const navMenu = document.querySelector(".nav-menu");
-            if (menuToggle && navMenu) {
-                menuToggle.addEventListener("click", () => {
-                    navMenu.classList.toggle("active");
+                    }
                 });
             }
+            
+            breadcrumbTitle.textContent = title;
+            document.title = `${title} - Mathematics PhD Portfolio`;
+
+            // Construct HTML for header and content
+            let htmlContent = `
+            <header class="blog-header">
+                <h1 class="post-title">${title}</h1>
+                <div class="blog-meta">
+                    <span class="post-date"><i class="far fa-calendar-alt"></i> ${date}</span>
+                    ${tags.length > 0 ? `<span class="post-tags"><i class="fas fa-tags"></i> ${tags.join(", ")}</span>` : ""}
+                </div>
+                <div class="post-author">
+                    <img src="../images/profile-placeholder.jpg" alt="Author image" class="author-image">
+                    <div class="author-info">
+                        <span class="author-name"><i class="fas fa-user"></i> ${author}</span>
+                    </div>
+                </div>
+            </header>
+            <article class="blog-content">
+                ${marked.parse(mainContent)}
+            </article>
+        `;
+            contentArea.innerHTML = htmlContent;
+
+            // Populate tags in the footer
+            if (tags.length > 0) {
+                tagsContainer.innerHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join(" ");
+            }
+
+            // Render MathJax/KaTeX if present
+            if (window.renderMathInElement) {
+                renderMathInElement(contentArea, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false},
+                        {left: "\\(", right: "\\)", display: false},
+                        {left: "\\[", right: "\\]", display: true}
+                    ]
+                });
+            }
+
+        } catch (error) {
+            console.error("Error fetching or rendering blog post:", error);
+            contentArea.innerHTML = `<p>Error loading blog post: ${error.message}. Please check the file path and ensure the Markdown file exists in the 'blog' directory.</p>`;
+        }
+        
+        // Basic menu toggle functionality from main.js (if not already loaded or conflicting)
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navMenu = document.querySelector(".nav-menu");
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+            });
+        }
+
+        // --- Comment System Integration (Polished UI/UX) ---
+        const postId = postFile ? postFile.replace(/\.[^.]+$/, "") : null;
+        const API_BASE = "http://localhost:4000/api";
+        const commentAuthArea = document.getElementById("comment-auth-area");
+        const commentForm = document.getElementById("comment-form");
+        const commentsList = document.getElementById("comments-list");
+        const commentError = document.getElementById("comment-error");
+        const charCount = document.getElementById("comment-char-count");
+
+        let jwt = localStorage.getItem("blog_jwt") || null;
+        let user = null;
+
+        // Google Login Integration
+        function renderAuthUI() {
+            commentAuthArea.innerHTML = "";
+            if (!user) {
+                const loginDiv = document.createElement("div");
+                loginDiv.id = "g_id_signin";
+                commentAuthArea.appendChild(loginDiv);
+                const loginMsg = document.createElement("div");
+                loginMsg.className = "comment-login-message";
+                loginMsg.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>Please sign in with Google to comment.' +
+                    '</span>';
+                commentAuthArea.appendChild(loginMsg);
+                window.google.accounts.id.initialize({
+                    client_id: "YOUR_GOOGLE_CLIENT_ID", // <-- Replace with your real client ID
+                    callback: handleGoogleCredentialResponse
+                });
+                window.google.accounts.id.renderButton(loginDiv, { theme: "filled_blue", size: "large", width: 240 });
+            } else {
+                const info = document.createElement("div");
+                info.className = "comment-user-info";
+                info.innerHTML = `<img src="${user.picture}" alt="User" class="comment-user-avatar">`
+                    + `<span class="comment-user-name">${user.name}</span> <span class="comment-user-email">(${user.email})</span> `
+                    + `<button id="logout-btn" class="btn small comment-logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i> Logout</button>`;
+                commentAuthArea.appendChild(info);
+                document.getElementById("logout-btn").onclick = () => {
+                    localStorage.removeItem("blog_jwt");
+                    jwt = null;
+                    user = null;
+                    renderAuthUI();
+                    renderCommentForm();
+                };
+            }
+        }
+
+        function handleGoogleCredentialResponse(response) {
+            commentError.textContent = "";
+            fetch(`${API_BASE}/auth/google`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ credential: response.credential })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.token) {
+                    jwt = data.token;
+                    user = data.user;
+                    localStorage.setItem("blog_jwt", jwt);
+                    renderAuthUI();
+                    renderCommentForm();
+                    loadComments();
+                } else {
+                    commentError.textContent = data.error || "Login failed.";
+                }
+            })
+            .catch(() => { commentError.textContent = "Login failed."; });
+        }
+
+        function parseJwt(token) {
+            try {
+                return JSON.parse(atob(token.split('.')[1]));
+            } catch { return null; }
+        }
+
+        function renderCommentForm() {
+            if (user) {
+                commentForm.style.display = "block";
+            } else {
+                commentForm.style.display = "none";
+            }
+        }
+
+        // Character counter for comment textarea
+        commentForm.comment.addEventListener('input', function() {
+            charCount.textContent = `${this.value.length}/1000`;
+            if (this.value.length > 1000) {
+                charCount.style.color = '#e57373';
+            } else {
+                charCount.style.color = '';
+            }
         });
+
+        // Fetch and render comments
+        function loadComments() {
+            commentsList.innerHTML = '<div class="comment-loading"><i class="fas fa-spinner fa-spin"></i> Loading comments...</div>';
+            fetch(`${API_BASE}/comments?post=${encodeURIComponent(postId)}`)
+                .then(res => res.json())
+                .then(data => {
+                    commentsList.innerHTML = "";
+                    if (!data.length) {
+                        commentsList.innerHTML = '<div class="comment-empty">No comments yet. Be the first to comment!</div>';
+                        return;
+                    }
+                    renderCommentsRecursive(data, commentsList);
+                })
+                .catch(() => {
+                    commentsList.innerHTML = '<div class="comment-error">Failed to load comments.</div>';
+                });
+        }
+
+        function renderCommentsRecursive(comments, container, depth = 0) {
+            comments.forEach(comment => {
+                const item = document.createElement('div');
+                item.className = 'comment-item';
+                item.style.marginLeft = `${depth * 24}px`;
+                item.innerHTML = `
+                    <div class="comment-header">
+                        <img src="${comment.user_picture}" alt="User" class="comment-avatar">
+                        <span class="comment-author">${comment.user_name}</span>
+                        <span class="comment-date">${new Date(comment.date).toLocaleString()}</span>
+                        ${user && (user.id === comment.user_id || user.isAdmin) ? `<button class="delete-button" title="Delete" data-id="${comment.id}"><i class="fas fa-trash"></i></button>` : ""}
+                    </div>
+                    <div class="comment-text">${escapeHtml(comment.text)}</div>
+                    <div class="replies-list"></div>
+                `;
+                // Delete button
+                if (user && (user.id === comment.user_id || user.isAdmin)) {
+                    item.querySelector('.delete-button').onclick = function() {
+                        if (confirm('Delete this comment and all its replies?')) {
+                            fetch(`${API_BASE}/comments/${comment.id}`, {
+                                method: 'DELETE',
+                                headers: { 'Authorization': `Bearer ${jwt}` }
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) loadComments();
+                                else commentError.textContent = data.error || 'Delete failed.';
+                            })
+                            .catch(() => { commentError.textContent = 'Delete failed.'; });
+                        }
+                    };
+                }
+                // Replies
+                if (comment.replies && comment.replies.length) {
+                    renderCommentsRecursive(comment.replies, item.querySelector('.replies-list'), depth + 1);
+                }
+                container.appendChild(item);
+            });
+        }
+
+        // Escape HTML for comment text
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(tag) {
+                const chars = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+                return chars[tag] || tag;
+            });
+        }
+
+        // Submit new comment
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            commentError.textContent = "";
+            const text = commentForm.comment.value.trim();
+            if (!text) return;
+            if (text.length > 1000) {
+                commentError.textContent = 'Comment is too long (max 1000 characters).';
+                return;
+            }
+            fetch(`${API_BASE}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify({ post: postId, text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.id) {
+                    commentForm.reset();
+                    charCount.textContent = '0/1000';
+                    loadComments();
+                } else {
+                    commentError.textContent = data.error || 'Failed to post comment.';
+                }
+            })
+            .catch(() => { commentError.textContent = 'Failed to post comment.'; });
+        });
+
+        // On load: try to restore user from JWT
+        if (jwt) {
+            const payload = parseJwt(jwt);
+            if (payload && (!payload.exp || Date.now() < payload.exp * 1000)) {
+                user = payload;
+            } else {
+                localStorage.removeItem("blog_jwt");
+                jwt = null;
+            }
+        }
+        renderAuthUI();
+        renderCommentForm();
+        if (postId) loadComments();
+    });
     </script>
 </body>
 </html>

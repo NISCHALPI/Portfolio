@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/blog-listing.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/animation.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
@@ -40,17 +41,16 @@
                 <div class="underline"></div>
             </div>
             
-            <div class="blog-intro">
+            <div class="blog-intro reveal">
                 <p>Welcome to my mathematics blog where I share insights, explorations, and tutorials on various mathematical topics.</p>
             </div>
             
             <!-- Search and Sort Controls -->
-            <div class="blog-controls">
+            <div class="blog-controls reveal">
                 <div class="blog-search">
-                    <input type="text" id="blog-search-input" placeholder="Search blog posts..." aria-label="Search blog posts">
-                    <button id="blog-search-button" class="btn primary"><i class="fas fa-search"></i></button>
+                    <input type="text" id="search-input" placeholder="Search by title or tag..." aria-label="Search blogs">
+                    <button id="search-button" class="btn secondary"><i class="fas fa-search"></i></button>
                 </div>
-                
                 <div class="blog-sort">
                     <label for="sort-select">Sort by:</label>
                     <select id="sort-select">
@@ -60,9 +60,9 @@
                     </select>
                 </div>
             </div>
-            
+             
             <!-- Featured Post (Can be made dynamic too if needed) -->
-            <div class="featured-post" id="featured-post-container">
+            <div class="featured-post fade-in" id="featured-post-container">
                 <!-- Featured post will be loaded here by JavaScript -->
             </div>
             
@@ -79,7 +79,7 @@
                 <!-- Pagination can be added if there are many posts -->
             </div>
             
-            <div class="blog-subscribe">
+            <div class="blog-subscribe reveal">
                 <h3>Subscribe to My Blog</h3>
                 <p>Get notified when I publish new articles on mathematics and research insights.</p>
                 <form class="subscribe-form">
@@ -102,8 +102,6 @@
         document.addEventListener("DOMContentLoaded", async function() {
             const blogPostsContainer = document.getElementById("blog-posts-container");
             const featuredPostContainer = document.getElementById("featured-post-container");
-            const searchInput = document.getElementById("blog-search-input");
-            const searchButton = document.getElementById("blog-search-button");
             const sortSelect = document.getElementById("sort-select");
             const noResultsMessage = document.querySelector(".no-results-message");
             const clearSearchButton = document.getElementById("clear-search");
@@ -120,6 +118,10 @@
                     // Convert date strings to Date objects for sorting
                     allPosts.forEach(post => {
                         post.dateTimestamp = new Date(post.date).getTime();
+                        // Create searchable content from title and tags for easier searching
+                        post.searchContent = post.title.toLowerCase() + 
+                            (post.tags ? ' ' + post.tags.join(' ').toLowerCase() : '') +
+                            (post.description ? ' ' + post.description.toLowerCase() : '');
                     });
                     displayPosts(allPosts);
                     displayFeaturedPost(allPosts);
@@ -141,13 +143,26 @@
                         <div class="featured-post-content">
                             <div class="post-meta">
                                 <span class="post-date">${new Date(featuredPost.dateTimestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                <span class="post-category">${featuredPost.tags ? featuredPost.tags.join(', ') : 'General'}</span>
+                                ${featuredPost.tags ? `<div class="post-tags">${featuredPost.tags.map(tag => `<span class="tag-pill" data-tag="${tag}">${tag}</span>`).join('')}</div>` : ''}
                             </div>
                             <h3>${featuredPost.title}</h3>
                             <p>${featuredPost.description || ''}</p>
                             <a href="blog/blog-template.html?post=${featuredPost.file}" class="btn primary">Read Article</a>
                         </div>
                     `;
+                    
+                    // Add click event listeners for tag pills in featured post
+                    featuredPostContainer.querySelectorAll('.tag-pill').forEach(pill => {
+                        pill.addEventListener('click', function() {
+                            const tagValue = this.getAttribute('data-tag');
+                            const searchInput = document.getElementById('search-input');
+                            searchInput.value = tagValue;
+                            filterAndSortPosts();
+                        });
+                    });
+                    
+                    // Initialize the animation for featured post - apply active class immediately to prevent flicker
+                    featuredPostContainer.classList.add('active');
                 }
             }
 
@@ -159,9 +174,15 @@
                 }
                 noResultsMessage.style.display = "none";
 
-                postsToDisplay.forEach(post => {
+                postsToDisplay.forEach((post, index) => {
                     const postElement = document.createElement("div");
-                    postElement.classList.add("blog-post");
+                    postElement.classList.add("blog-post", "fade-in");
+                    // Add staggered animation with delay
+                    postElement.style.transitionDelay = `${index * 0.1}s`;
+                    setTimeout(() => {
+                        postElement.classList.add("active");
+                    }, 100 + (index * 100));
+                    
                     postElement.dataset.timestamp = post.dateTimestamp;
                     postElement.dataset.category = post.tags ? post.tags.join(" ") : ""; // For potential category filtering
                     postElement.dataset.title = post.title;
@@ -169,28 +190,38 @@
                     postElement.innerHTML = `
                         <div class="post-date">${new Date(post.dateTimestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                         <h3>${post.title}</h3>
+                        ${post.tags ? `<div class="post-tags">${post.tags.map(tag => `<span class="tag-pill" data-tag="${tag}">${tag}</span>`).join('')}</div>` : ''}
                         <p>${post.description || 'Click to read more.'}</p>
                         <div class="post-footer">
-                            <span class="post-category">${post.tags ? post.tags.join(', ') : 'General'}</span>
                             <a href="blog/blog-template.html?post=${post.file}" class="read-more">Read More</a>
                         </div>
                     `;
                     blogPostsContainer.appendChild(postElement);
                 });
+                
+                // Add click event listeners for tag pills
+                document.querySelectorAll('.tag-pill').forEach(pill => {
+                    pill.addEventListener('click', function() {
+                        const tagValue = this.getAttribute('data-tag');
+                        const searchInput = document.getElementById('search-input');
+                        searchInput.value = tagValue;
+                        filterAndSortPosts();
+                    });
+                });
             }
 
             function filterAndSortPosts() {
                 let filteredPosts = [...allPosts];
-                const searchTerm = searchInput.value.toLowerCase().trim();
-
+                
+                // Apply search filter if search input has value
+                const searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
                 if (searchTerm) {
-                    filteredPosts = filteredPosts.filter(post => 
-                        post.title.toLowerCase().includes(searchTerm) || 
-                        (post.description && post.description.toLowerCase().includes(searchTerm)) ||
-                        (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
-                    );
+                    filteredPosts = filteredPosts.filter(post => {
+                        return post.searchContent.includes(searchTerm);
+                    });
                 }
 
+                // Apply sorting
                 const sortValue = sortSelect.value;
                 filteredPosts.sort((a, b) => {
                     if (sortValue === "newest") {
@@ -206,17 +237,26 @@
                 displayPosts(filteredPosts);
             }
 
-            searchButton.addEventListener("click", filterAndSortPosts);
-            searchInput.addEventListener("keyup", function(e) {
-                if (e.key === "Enter") {
+            clearSearchButton.addEventListener("click", function() {
+                document.getElementById("search-input").value = "";
+                filterAndSortPosts();
+            });
+            
+            sortSelect.addEventListener("change", filterAndSortPosts);
+            
+            // Add event listeners for search functionality
+            const searchInput = document.getElementById("search-input");
+            const searchButton = document.getElementById("search-button");
+            
+            searchInput.addEventListener("keyup", function(event) {
+                if (event.key === "Enter") {
                     filterAndSortPosts();
                 }
             });
-            clearSearchButton.addEventListener("click", function() {
-                searchInput.value = "";
+            
+            searchButton.addEventListener("click", function() {
                 filterAndSortPosts();
             });
-            sortSelect.addEventListener("change", filterAndSortPosts);
 
             // Subscribe form functionality (remains the same)
             const subscribeForm = document.querySelector(".subscribe-form");
