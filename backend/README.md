@@ -1,13 +1,12 @@
 # Portfolio Blog Backend
 
-This backend provides a comment API for the portfolio blog, with Google OAuth authentication and SQLite persistence.
+This backend provides a comment API for the portfolio blog with PostgreSQL persistence.
 
 ## Features
-- Google login (OAuth2, JWT)
 - Threaded comments (with replies)
-- Only authenticated users can comment
-- Only comment author or admin can delete
-- SQLite database
+- Anonymous commenting (name and email required)
+- PostgreSQL database for persistent storage
+- Comment threading with parent-child relationships
 - CORS enabled for frontend
 
 ## Setup
@@ -16,7 +15,15 @@ This backend provides a comment API for the portfolio blog, with Google OAuth au
    ```bash
    npm install
    ```
-2. Set up `.env` (see `.env` in this folder for required variables).
+2. Set up `.env` with the following variables:
+   ```
+   PORT=4000
+   PGUSER=postgres
+   PGHOST=db
+   PGPASSWORD=password
+   PGDATABASE=portfolio
+   PGPORT=5432
+   ```
 3. Start the server:
    ```bash
    npm start
@@ -24,11 +31,31 @@ This backend provides a comment API for the portfolio blog, with Google OAuth au
 
 ## API Endpoints
 
-- `POST /api/login` — Exchange Google ID token for JWT
-- `GET /api/comments?post=POST_ID` — List comments for a post
-- `POST /api/comments` — Add comment (auth required)
-- `DELETE /api/comments/:id` — Delete comment (author or admin only)
+- `GET /api/comments/:postId` — List comments for a post
+- `POST /api/comments` — Add comment (no auth required)
+  - Required body: `{ postId, author, email, content, parentId? }`
+- `DELETE /api/comments/:id` — Delete comment (admin use only)
+
+## Database Schema
+
+The database uses a single table for comments with self-referencing for replies:
+
+```sql
+CREATE TABLE comments (
+  id VARCHAR(36) PRIMARY KEY,
+  post_id VARCHAR(255) NOT NULL,
+  parent_id VARCHAR(36) DEFAULT NULL,
+  author VARCHAR(100) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_parent 
+    FOREIGN KEY(parent_id) 
+    REFERENCES comments(id)
+    ON DELETE CASCADE
+)
+```
 
 ## Docker
 
-This backend can be run in Docker. See `docker-compose.yml` at project root.
+This backend should be run in Docker using the provided Dockerfile and the docker-compose.yml at the project root.
