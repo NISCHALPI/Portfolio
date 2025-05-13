@@ -135,9 +135,12 @@
                 // Assuming the first post in posts.json is the featured one, or you can add a "featured: true" flag in posts.json
                 const featuredPost = posts.find(p => p.featured) || (posts.length > 0 ? posts[0] : null);
                 if (featuredPost) {
+                    // Adjust the image path for the correct relative path from blog.html
+                    const imagePath = featuredPost.image ? featuredPost.image.replace('../', '') : 'assets/images/math-bg.jpg';
+                    
                     featuredPostContainer.innerHTML = `
                         <div class="featured-post-image">
-                            <img src="${featuredPost.image || 'images/math-bg.jpg'}" alt="${featuredPost.title}">
+                            <img src="${imagePath}" alt="${featuredPost.title}">
                             <div class="featured-tag">Featured</div>
                         </div>
                         <div class="featured-post-content">

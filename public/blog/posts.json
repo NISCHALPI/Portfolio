@@ -4,7 +4,7 @@
         "date": "2025-05-09",
         "author": "Dr. Math Enthusiast",
         "tags": ["mathematics", "euler's identity", "complex analysis", "latex"],
-        "image": "../images/math-bg.jpg",
+        "image": "../assets/images/math-bg.jpg",
         "description": "A brief dive into the elegance of Euler's Identity, e^{i\\pi} + 1 = 0, showcasing LaTeX rendering in Markdown.",
         "file": "./markdown/sample-math-post.md",
         "featured": true
@@ -16,7 +16,7 @@
         "date": "2025-02-18",
         "author": "Jane Doe",
         "tags": ["mathematical-logic", "proofs"],
-        "image": "../images/math-bg.jpg",
+        "image": "../assets/images/math-bg.jpg",
         "description": "Exploring the elegance and creativity behind mathematical proofs, showcasing some of the most beautiful examples.",
         "file": "./markdown/blog-template.md"
         

@@ -9,22 +9,30 @@ This backend provides a comment API for the portfolio blog with PostgreSQL persi
 - Comment threading with parent-child relationships
 - CORS enabled for frontend
 
+## Prerequisites
+- Node.js (v18 or higher recommended)
+- PostgreSQL (v15 or higher recommended)
+
 ## Setup
 
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Set up `.env` with the following variables:
+2. Set up a PostgreSQL database named `portfolio`
+
+3. Create a `.env` file with the following variables:
    ```
    PORT=4000
    PGUSER=postgres
-   PGHOST=db
+   PGHOST=localhost
    PGPASSWORD=password
    PGDATABASE=portfolio
    PGPORT=5432
    ```
-3. Start the server:
+   (Adjust the PostgreSQL connection details to match your local configuration)
+
+4. Start the server:
    ```bash
    npm start
    ```
@@ -55,7 +63,3 @@ CREATE TABLE comments (
     ON DELETE CASCADE
 )
 ```
-
-## Docker
-
-This backend should be run in Docker using the provided Dockerfile and the docker-compose.yml at the project root.

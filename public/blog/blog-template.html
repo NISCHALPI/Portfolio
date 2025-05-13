@@ -112,8 +112,9 @@
         }
 
         try {
-            // Fetch the Markdown file
-            const response = await fetch(postFile); // Assumes postFile is a relative path like 'example-post.md'
+            // Fetch the Markdown file - make sure the path is correct
+            console.log("Attempting to fetch:", postFile);
+            const response = await fetch(postFile); // Assumes postFile is a relative path like './markdown/sample-math-post.md'
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -163,7 +164,7 @@
                     ${tags.length > 0 ? `<span class="post-tags"><i class="fas fa-tags"></i> ${tags.join(", ")}</span>` : ""}
                 </div>
                 <div class="post-author">
-                    <img src="../images/profile-placeholder.jpg" alt="Author image" class="author-image">
+                    <img src="../assets/images/profile-placeholder.jpg" alt="Author image" class="author-image">
                     <div class="author-info">
                         <span class="author-name"><i class="fas fa-user"></i> ${author}</span>
                     </div>
@@ -194,7 +195,9 @@
 
         } catch (error) {
             console.error("Error fetching or rendering blog post:", error);
-            contentArea.innerHTML = `<p>Error loading blog post: ${error.message}. Please check the file path and ensure the Markdown file exists in the 'blog' directory.</p>`;
+            contentArea.innerHTML = `<p>Error loading blog post: ${error.message}.</p>
+            <p>Attempted to load: ${postFile}</p>
+            <p>Please check the file path and ensure the Markdown file exists in the correct location.</p>`;
         }
         
         // Basic menu toggle functionality from main.js (if not already loaded or conflicting)
@@ -207,8 +210,9 @@
         }
 
         // --- API-based Comment System with Reply Functionality ---
-        // Extract post ID from the Markdown file name
-        const postId = postFile ? postFile.replace(/\.[^.]+$/, "") : null;
+        // Extract post ID from the Markdown file name - remove path and extension
+        const postId = postFile ? postFile.split('/').pop().replace(/\.[^.]+$/, "") : null;
+        console.log("Using post ID for comments:", postId);
         const commentsList = document.getElementById("comments-list");
         const commentForm = document.getElementById("comment-form");
         const commentError = document.getElementById("comment-error");

@@ -3,7 +3,7 @@ title: "Your Blog Post Title Here"
 date: "YYYY-MM-DD"
 author: "Your Name"
 tags: ["tag1", "tag2", "tag3"]
-image: "images/your-post-image.jpg" # Optional: path to a banner image for the post
+image: "../../assets/images/math-bg.jpg" # Using the correct path to the assets directory
 description: "A brief description of your blog post."
 ---
 

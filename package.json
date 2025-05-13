@@ -1,0 +1,19 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio website with blog",
+  "scripts": {
+    "start": "cd server && node server.js",
+    "dev": "cd server && nodemon server.js",
+    "install-server": "cd server && npm install",
+    "postinstall": "npm run install-server"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

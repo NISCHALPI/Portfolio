@@ -3,7 +3,7 @@ title: "Exploring Euler's Identity: The Most Beautiful Equation"
 date: "2025-05-09"
 author: "Dr. Math Enthusiast"
 tags: ["mathematics", "euler's identity", "complex analysis", "latex"]
-image: "../../images/profile-placeholder.jpg" # You can replace this with a more specific image if available
+image: "../../assets/images/profile-placeholder.jpg" # Now using the correct path to the assets directory
 description: "A brief dive into the elegance of Euler's Identity, $e^{i\pi} + 1 = 0$, showcasing LaTeX rendering in Markdown."
 ---
 

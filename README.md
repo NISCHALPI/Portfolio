@@ -31,17 +31,27 @@ The blog features a PostgreSQL-powered comment system with the following capabil
 
 To run the complete website with the comment system:
 
-1. Start the entire stack using Docker Compose:
+1. Set up and start the PostgreSQL database
+   ```bash
+   # Install PostgreSQL if needed
+   # Create a database named 'portfolio'
+   ```
 
-```bash
-docker-compose up -d
-```
+2. Start the backend server:
+   ```bash
+   cd backend
+   npm install
+   npm start
+   ```
 
-This will start:
-- PostgreSQL database on port 5432
-- Backend API server on port 4000
-- Nginx server for the frontend on port 8080
+3. Serve the frontend:
+   ```bash
+   # Using Python's built-in HTTP server (or any other simple HTTP server)
+   python3 -m http.server 8080
+   # OR using Node.js http-server (install with: npm install -g http-server)
+   # http-server -p 8080
+   ```
 
-2. Access the website at: http://localhost:8080/
+4. Access the website at: http://localhost:8080/
 
 Thank you for visiting my portfolio website!
