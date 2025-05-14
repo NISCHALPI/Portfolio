@@ -4,7 +4,7 @@ date: "YYYY-MM-DD"
 author: "Your Name"
 tags: ["tag1", "tag2", "tag3"]
 image: "../../assets/images/math-bg.jpg" # Using the correct path to the assets directory
-description: "A brief description of your blog post."
+description: "A brief description of your blog post. Hi there"
 ---
 
 # {{title}}

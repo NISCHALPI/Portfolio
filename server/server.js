@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./models/db');
 const commentsRoutes = require('./routes/comments');
+const blogsRoutes = require('./routes/blogs');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -19,8 +20,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'API server running with PostgreSQL database for comments' });
 });
 
-// Comments routes
+// API routes
 app.use('/api/comments', commentsRoutes);
+app.use('/api/blogs', blogsRoutes);
 
 // Initialize database before starting server
 db.initDb().then(() => {

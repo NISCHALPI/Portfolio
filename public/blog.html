@@ -110,7 +110,8 @@
 
             async function fetchPosts() {
                 try {
-                    const response = await fetch("blog/posts.json");
+                    // Fetch posts from the server API instead of static posts.json file
+                    const response = await fetch("/api/blogs");
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }

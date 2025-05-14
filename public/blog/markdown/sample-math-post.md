@@ -4,7 +4,8 @@ date: "2025-05-09"
 author: "Dr. Math Enthusiast"
 tags: ["mathematics", "euler's identity", "complex analysis", "latex"]
 image: "../../assets/images/profile-placeholder.jpg" # Now using the correct path to the assets directory
-description: "A brief dive into the elegance of Euler's Identity, $e^{i\pi} + 1 = 0$, showcasing LaTeX rendering in Markdown."
+description: "A brief dive into the elegance of Euler's Identity showcasing LaTeX rendering in Markdown."
+featured : "true"
 ---
 
 ## Introduction to Euler's Identity

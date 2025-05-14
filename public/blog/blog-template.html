@@ -112,44 +112,30 @@
         }
 
         try {
-            // Fetch the Markdown file - make sure the path is correct
-            console.log("Attempting to fetch:", postFile);
-            const response = await fetch(postFile); // Assumes postFile is a relative path like './markdown/sample-math-post.md'
+            // Extract filename from postFile
+            const filename = postFile.split('/').pop();
+            
+            // Fetch the blog post from our API instead of loading the markdown file directly
+            console.log("Attempting to fetch post from API:", filename);
+            const response = await fetch(`/api/blogs/${filename}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const markdownContent = await response.text();
-
-            // Basic frontmatter parsing (can be made more robust)
-            let title = postFile.replace(".md", "").replace(/-/g, " "); // Default title
-            let author = "Author";
-            let date = "Date";
-            let tags = [];
-            let mainContent = markdownContent;
-
-            const frontmatterMatch = markdownContent.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
-            if (frontmatterMatch && frontmatterMatch[1]) {
-                const frontmatterText = frontmatterMatch[1];
-                mainContent = markdownContent.substring(frontmatterMatch[0].length);
-                const lines = frontmatterText.split("\n");
-                lines.forEach(line => {
-                    const parts = line.split(":");
-                    if (parts.length >= 2) {
-                        const key = parts[0].trim();
-                        const value = parts.slice(1).join(":").trim().replace(/^["']|["']$/g, ""); // Remove quotes
-                        if (key === "title") title = value;
-                        if (key === "author") author = value;
-                        if (key === "date") date = new Date(value).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-                        if (key === "tags") {
-                            try {
-                                tags = JSON.parse(value); // Expects tags: ["tag1", "tag2"]
-                            } catch (e) {
-                                 // Fallback for simple comma-separated tags without brackets
-                                tags = value.split(",").map(tag => tag.trim());
-                            }
-                        }
-                    }
-                });
+            const blogData = await response.json();
+            
+            // Extract the data from the API response
+            let title = blogData.metadata.title;
+            let author = blogData.metadata.author;
+            let date = blogData.metadata.date;
+            let tags = blogData.metadata.tags || [];
+            let image = blogData.metadata.image || '../../assets/images/math-bg.jpg'; // Default to math-bg.jpg if no image provided
+            let mainContent = blogData.content;
+            
+            // Format the date nicely if it's a valid date string
+            try {
+                date = new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+            } catch (e) {
+                console.warn("Could not format date:", date);
             }
             
             breadcrumbTitle.textContent = title;
