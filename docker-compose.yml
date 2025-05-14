@@ -1,0 +1,61 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: portfolio-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-4000}
+      - PGUSER=${PGUSER}
+      - PGHOST=${PGHOST}
+      - PGDATABASE=${PGDATABASE}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGPORT=${PGPORT}
+    expose:
+      - "${PORT:-4000}"
+    # The command now uses the wait-for-postgres.sh script.
+    # It waits for the service named by PGHOST (which should be 'postgres')
+    # and then executes 'npm start'.
+    command: ["./wait-for-postgres.sh", "${PGHOST:-postgres}", "npm", "start"]
+    depends_on:
+      - postgres 
+    networks:
+      - portfolio-net
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: portfolio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - portfolio-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - portfolio-net
+
+networks:
+  portfolio-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+

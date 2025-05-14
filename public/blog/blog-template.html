@@ -217,10 +217,10 @@
         const commentForm = document.getElementById("comment-form");
         const commentError = document.getElementById("comment-error");
         const charCount = document.getElementById("comment-char-count");
-        const API_URL = window.location.hostname === 'localhost' 
-                        ? 'http://localhost:4000/api/comments' 
-                        : 'http://your-production-domain.com/api/comments';
-        
+        const API_URL = "/api/comments"; // Adjust this to your API endpoint
+        // Ensure the API URL is correct and accessible
+        console.log("API URL for comments set to:", API_URL);
+
         // Keep track of reply state
         let replyingTo = null;
         let replyingToName = null;
