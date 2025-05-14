@@ -5,6 +5,7 @@ const cors = require('cors');
 const db = require('./models/db');
 const commentsRoutes = require('./routes/comments');
 const blogsRoutes = require('./routes/blogs');
+const blogWatcher = require('./services/blogWatcher');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -26,9 +27,13 @@ app.use('/api/blogs', blogsRoutes);
 
 // Initialize database before starting server
 db.initDb().then(() => {
+  // Initialize the blog watcher to monitor markdown files
+  blogWatcher.initBlogWatcher();
+  
   app.listen(PORT, () => {
     console.log(`Backend running on port ${PORT}`);
     console.log(`Database connected successfully`);
+    console.log(`Blog watcher initialized`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     console.log(`Using PostgreSQL at ${process.env.PGHOST}:${process.env.PGPORT}`);
     console.log(`Environment variables loaded:`, {

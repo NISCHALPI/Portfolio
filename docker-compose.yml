@@ -15,6 +15,8 @@ services:
       - PGPORT=${PGPORT}
     expose:
       - "${PORT:-4000}"
+    volumes:
+      - blog_markdown:/usr/src/app/public/blog/markdown
     # The command now uses the wait-for-postgres.sh script.
     # It waits for the service named by PGHOST (which should be 'postgres')
     # and then executes 'npm start'.
@@ -58,4 +60,6 @@ networks:
 
 volumes:
   postgres_data:
+  blog_markdown:
+    driver: local
 
